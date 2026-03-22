@@ -2,16 +2,28 @@ import {
   createBrowserRouter, 
   createRoutesFromElements, 
   Route,
-  RouterProvider 
+  RouterProvider ,
+  Outlet
 } from "react-router"
 import Home from "./pages/Home"
 import Login from "./auth/Login"
-import Layout from "./layout/layout"
 import Cart from "./pages/Cart"
 import SignUp from "./auth/SignUp"
 import ProductDetails from "./pages/Product"
 import About from "./pages/About"
+import Navbar from "./components/Navbar"
+import Footer from "./components/Footer"
 
+
+const Layout = () => {
+  return (
+    <>
+    <Navbar/>
+    <Outlet/>
+    <Footer/>
+    </>
+  )
+}
 const App = () => {
   const router = createBrowserRouter(createRoutesFromElements(
     <Route>

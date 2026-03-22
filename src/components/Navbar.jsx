@@ -13,6 +13,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const searchQuery = useSelector((state) => state.search.query);
+  const cartCount = useSelector((state) => state.cart.products).length
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -67,16 +68,29 @@ const Navbar = () => {
             
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-              {['Home', 'Shop', 'Collections'].map((item) => (
-                <a 
-                  key={item} 
-                  href={`#${item.toLowerCase()}`} 
+              
+              <Link
+                  to = '/' 
                   className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group"
                 >
-                  {item}
+                  Home
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+              </Link>
+              <a
+                  // to = '/Collection' 
+                  href='#'
+                  className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group"
+                >
+                  Collection
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+              </a>
+              <a
+                  href = '#shop' 
+                  className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group"
+                >
+                  Shop
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-              ))}
               <Link
                   to = '/about' 
                   className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group"
@@ -93,6 +107,11 @@ const Navbar = () => {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
+                
+                {/* Gradient circle with cart count */}
+                <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                  {cartCount}
+                </div>
               </NavLink>
 
               {/* Search Section - Input appears on the RIGHT side */}
@@ -134,7 +153,46 @@ const Navbar = () => {
                   </form>
                 </div>
               </div>
-              
+              {/*appears under in small screens (phones or mobiles) */}
+              <div className="flex md:hidden relative items-center">
+                <button 
+                  onClick={() => setSearchOpen(!searchOpen)}
+                  className={`p-2 transition-colors rounded-full hover:bg-gray-100 relative z-10 ${
+                    searchOpen ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                  }`}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+                
+                {/* Search Input - Dropdown below */}
+                <div className={`absolute top-full right-0 mt-2 transition-all duration-300 ease-in-out ${
+                  searchOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+                }`}>
+                  <form className="relative">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+                      placeholder="Search products..."
+                      className="w-64 px-4 py-2 pl-4 pr-10 text-sm bg-white border border-gray-300 rounded-lg shadow-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      autoFocus={searchOpen}
+                    />
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => dispatch(setSearchQuery(''))}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    )}
+                  </form>
+                </div>
+              </div>
               
           {/* User Section */}
           {isAuthenticated ? (

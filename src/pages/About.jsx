@@ -1,4 +1,4 @@
-import { FaStar, FaTruck, FaShieldAlt, FaHeadset, FaLeaf, FaCreditCard } from 'react-icons/fa';
+import { FaStar} from 'react-icons/fa';
 import Members from '../components/About/Members';
 import CallToAction from '../components/About/CallToAction';
 import Stats from '../components/About/Stats';
