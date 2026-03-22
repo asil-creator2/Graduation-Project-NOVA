@@ -1,0 +1,42 @@
+@import "tailwindcss" ;
+
+        @keyframes slide-down {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-slide-down {
+          animation: slide-down 0.3s ease-out;
+        }
+        
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-out;
+        }
+        
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        
+        @media (min-width: 480px) {
+          .xs\\:inline {
+            display: inline;
+          }
+        }
+button{
+  cursor: pointer;
+}
+
+html{
+  scroll-behavior: smooth;
+}
