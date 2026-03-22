@@ -1,31 +1,30 @@
 import { Link, NavLink, useNavigate } from 'react-router';
-import { FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../Redux/authSlice';
 import { useEffect, useState } from 'react';
-import {setSearchQuery} from '../Redux/searchSlice'
-import { FaUserCircle } from "react-icons/fa";
-
-// Inside your Navbar component
+import { setSearchQuery } from '../Redux/searchSlice';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  
   const searchQuery = useSelector((state) => state.search.query);
-  const cartCount = useSelector((state) => state.cart.products).length
+  const cartCount = useSelector((state) => state.cart.products).length;
+  const user = useSelector((state) => state.auth.user);
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const user = useSelector((state) => state.auth.user);
 
   // Check if user is authenticated by checking if user exists
-  const isAuthenticated = user !== null && user !== undefined;
+  const isAuthenticated = user !== null && user !== undefined && user.email;
 
   const getUserDisplayName = () => {
     if (user?.displayName) return user.displayName;
     if (user?.email) return user.email.split('@')[0];
-    return 'User';
+    return '';
   };
 
   const handleLogout = () => {
@@ -41,10 +40,6 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-
-
-
 
   return (
     <>
@@ -68,36 +63,22 @@ const Navbar = () => {
             
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-              
-              <Link
-                  to = '/' 
-                  className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group"
-                >
-                  Home
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+              <Link to="/" className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group">
+                Home
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
-              <a
-                  // to = '/Collection' 
-                  href='#'
-                  className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group"
-                >
-                  Collection
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+              <a href="#shop" className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group">
+                Shop
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
               </a>
-              <a
-                  href = '#shop' 
-                  className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group"
-                >
-                  Shop
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-              <Link
-                  to = '/about' 
-                  className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group"
-                >
-                  About
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
-                </Link>
+              <a href="#" className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group">
+                Collections
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+              </a>
+              <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 relative group">
+                About
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+              </Link>
             </div>
             
             {/* Right Icons & Search */}
@@ -107,14 +88,14 @@ const Navbar = () => {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                
-                {/* Gradient circle with cart count */}
-                <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
-                  {cartCount}
-                </div>
+                {cartCount > 0 && (
+                  <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-linear-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                    {cartCount}
+                  </div>
+                )}
               </NavLink>
 
-              {/* Search Section - Input appears on the RIGHT side */}
+              {/* Search Section - Desktop */}
               <div className="hidden md:flex relative items-center">
                 <button 
                   onClick={() => setSearchOpen(!searchOpen)}
@@ -127,7 +108,6 @@ const Navbar = () => {
                   </svg>
                 </button>
                 
-                {/* Search Input - Slides from right to left */}
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
                   searchOpen ? 'w-64 opacity-100' : 'w-0 opacity-0'
                 }`}>
@@ -137,46 +117,7 @@ const Navbar = () => {
                       value={searchQuery}
                       onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                       placeholder="Search products..."
-                      className="w-full px-4 py-2 pl-4 pr-10 text-sm bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                      autoFocus={searchOpen}
-                    />
-                    {searchQuery && (
-                      <button
-                        type="button"
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    )}
-                  </form>
-                </div>
-              </div>
-              {/*appears under in small screens (phones or mobiles) */}
-              <div className="flex md:hidden relative items-center">
-                <button 
-                  onClick={() => setSearchOpen(!searchOpen)}
-                  className={`p-2 transition-colors rounded-full hover:bg-gray-100 relative z-10 ${
-                    searchOpen ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
-                  }`}
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
-                
-                {/* Search Input - Dropdown below */}
-                <div className={`absolute top-full right-0 mt-2 transition-all duration-300 ease-in-out ${
-                  searchOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-                }`}>
-                  <form className="relative">
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-                      placeholder="Search products..."
-                      className="w-64 px-4 py-2 pl-4 pr-10 text-sm bg-white border border-gray-300 rounded-lg shadow-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      className="w-full px-4 py-2 pl-4 pr-10 text-sm bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                       autoFocus={searchOpen}
                     />
                     {searchQuery && (
@@ -194,70 +135,105 @@ const Navbar = () => {
                 </div>
               </div>
               
-          {/* User Section */}
-          {isAuthenticated ? (
-            <div className="relative">
-              <button
-                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-all duration-200"
-              >
-                <div className="w-8 h-8 bg-linear-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white">
-                  <FaUser className="w-4 h-4" />
-                </div>
-                <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-200">
-                  {getUserDisplayName()}
-                </span>
-                <svg className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              
-              {/* Dropdown Menu */}
-              {userMenuOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)}></div>
-                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 overflow-hidden z-50">
-                    <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700">
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                        {getUserDisplayName()}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
-                        {user?.email}
-                      </p>
-                    </div>
-                    <div className="py-2">
-                      <NavLink
-                        to="/profile"
-                        className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition"
-                        onClick={() => setUserMenuOpen(false)}
-                      >
-                        <FaUserCircle className="w-4 h-4" />
-                        My Profile
-                      </NavLink>
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
-                      >
-                        <FaSignOutAlt className="w-4 h-4" />
-                        Sign Out
-                      </button>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          ) : (
-            /* Sign Up Button - Show when NOT authenticated */
-            <NavLink 
-              to="/signup" 
-              className="hidden sm:block px-4 md:px-6 py-2 bg-linear-to-r from-blue-600 to-blue-500 text-white rounded-full font-semibold text-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105"
-            >
-              Sign Up
-            </NavLink>
-          )}
+              {/* Search Section - Mobile */}
+              <div className="flex md:hidden relative items-center">
+                <button 
+                  onClick={() => setSearchOpen(!searchOpen)}
+                  className={`p-2 transition-colors rounded-full hover:bg-gray-100 relative z-10 ${
+                    searchOpen ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                  }`}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
                 
-
-    
+                <div className={`absolute top-full right-0 mt-2 transition-all duration-300 ease-in-out ${
+                  searchOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+                }`}>
+                  <form className="relative">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+                      placeholder="Search products..."
+                      className="w-64 px-4 py-2 pl-4 pr-10 text-sm bg-white border border-gray-300 rounded-lg shadow-lg focus:outline-none focus:border-blue-500"
+                      autoFocus={searchOpen}
+                    />
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => dispatch(setSearchQuery(''))}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    )}
+                  </form>
+                </div>
+              </div>
+              
+              {/* User Section */}
+              {isAuthenticated ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-all duration-200"
+                  >
+                    <div className="w-8 h-8 bg-linear-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white">
+                      <FaUser className="w-4 h-4" />
+                    </div>
+                    <span className="hidden sm:block text-sm font-medium text-gray-700">
+                      {getUserDisplayName()}
+                    </span>
+                    <svg className={`hidden sm:block w-4 h-4 text-gray-500 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  
+                  {userMenuOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)}></div>
+                      <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-50">
+                        <div className="px-4 py-3 border-b border-gray-100">
+                          <p className="text-sm font-semibold text-gray-900">
+                            {getUserDisplayName()}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1 truncate">
+                            {user?.email}
+                          </p>
+                        </div>
+                        <div className="py-2">
+                          <NavLink
+                            to="/profile"
+                            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <FaUserCircle className="w-4 h-4" />
+                            My Profile
+                          </NavLink>
+                          <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                          >
+                            <FaSignOutAlt className="w-4 h-4" />
+                            Sign Out
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <NavLink 
+                  to="/signup" 
+                  className="hidden sm:block px-4 md:px-6 py-2 bg-linear-to-r from-blue-600 to-blue-500 text-white rounded-full font-semibold text-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                >
+                  Sign Up
+                </NavLink>
+              )}
               
               {/* Mobile Menu Button */}
               <button 
@@ -275,41 +251,42 @@ const Navbar = () => {
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-gray-100 animate-slide-down">
               <div className="flex flex-col space-y-3">
-                {['Home', 'Shop', 'Collections', 'About'].map((item) => (
-                  <a key={item} href={`#${item.toLowerCase()}`} className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
-                    {item}
-                  </a>
-                ))}
-                {isAuthenticated ? (
-                  <>
-                    <div className="px-3 py-2 border-t border-gray-100 mt-2 pt-2">
-                      <div className="flex items-center gap-3 mb-3">
-
-                      </div>
-
-                      <button
-                        onClick={handleLogout}
-                        className="block w-full text-left px-3 py-2 mt-1 text-red-600 hover:bg-red-50 rounded-lg transition"
-                      >
-                        Sign Out
-                      </button>
-                    </div>
-                  </>
-                ) : (
+                <Link to="/" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50 transition" onClick={() => setMobileMenuOpen(false)}>
+                  Home
+                </Link>
+                <a href="#shop" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50 transition" onClick={() => setMobileMenuOpen(false)}>
+                  Shop
+                </a>
+                <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50 transition" onClick={() => setMobileMenuOpen(false)}>
+                  Collections
+                </a>
+                <Link to="/about" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50 transition" onClick={() => setMobileMenuOpen(false)}>
+                  About
+                </Link>
+                {!isAuthenticated ? (
                   <div className="pt-2">
                     <NavLink 
                       to="/signup" 
                       className="block w-full px-4 py-2.5 bg-linear-to-r from-blue-600 to-blue-500 text-white rounded-xl font-semibold text-center"
+                      onClick={() => setMobileMenuOpen(false)}
                     >
                       Sign Up
                     </NavLink>
                     <NavLink 
                       to="/login" 
                       className="block w-full px-4 py-2.5 mt-2 border border-gray-300 text-gray-700 rounded-xl font-semibold text-center hover:bg-gray-50 transition"
+                      onClick={() => setMobileMenuOpen(false)}
                     >
                       Sign In
                     </NavLink>
                   </div>
+                ) : (
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                  >
+                    Sign Out
+                  </button>
                 )}
               </div>
             </div>
