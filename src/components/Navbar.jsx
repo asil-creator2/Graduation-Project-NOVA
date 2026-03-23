@@ -1,5 +1,7 @@
 import { Link, NavLink, useNavigate } from 'react-router';
-import { FaUser, FaSignOutAlt, FaUserCircle, FaMoon, FaSun } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaUserCircle} from 'react-icons/fa';
+import { FiSun, FiMoon } from "react-icons/fi";
+
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../Redux/authSlice';
 import { useEffect, useState } from 'react';
@@ -112,7 +114,7 @@ const Navbar = () => {
                 className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 relative"
                 onClick={() => dispatch(toggleTheme())}
               >
-                {themeState === 'dark' ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
+                {themeState === 'dark' ? <FiSun className="w-5 h-5" /> : <FiMoon className="w-5 h-5" />}
               </button>
 
               {/* Search Section - Desktop */}

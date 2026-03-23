@@ -4,12 +4,16 @@ import { FcGoogle } from "react-icons/fc";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash, FaMoon, FaSun } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../Redux/authSlice";
 import { toggleTheme } from "../Redux/ThemeSlice";
 
 import app from "../firebase/firebase";
+import { useAlerts } from "../Helpers/Alerts";
+
+
+
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -23,15 +27,8 @@ const Login = () => {
   const theme = useSelector((state) => state.theme);
   const themeState = theme.state;
   const isDarkMode = themeState === 'dark';
+  const { showWelcome, showError } = useAlerts();
 
-  // Apply theme class to html element
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -66,6 +63,7 @@ const Login = () => {
           },
           token: await user.getIdToken()
         }));
+        showWelcome(user.displayName || user.email.split('@')[0]);
 
         window.location.href = "/";
       } catch (error) {

@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FiSun, FiMoon } from "react-icons/fi";
 
 const initialState = {
     state: 'light',
-    icon: FaSun
+    icon: FiSun
 }
 
 const themeSlice = createSlice({
@@ -13,15 +13,15 @@ const themeSlice = createSlice({
         toggleTheme: (state) => {
             if (state.state === 'light') {
                 state.state = 'dark';
-                state.icon = FaMoon;
+                state.icon = FiMoon;
             } else {
                 state.state = 'light';
-                state.icon = FaSun;
+                state.icon = FiSun;
             }
         },
         setTheme: (state, action) => {
             state.state = action.payload;
-            state.icon = action.payload === 'dark' ? FaMoon : FaSun;
+            state.icon = action.payload === 'dark' ? FiMoon : FiSun;
         }
     }
 })

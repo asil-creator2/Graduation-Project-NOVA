@@ -1,15 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const CartSlice = createSlice({
-    name: 'themeSlice',
+    name: 'CartSlice',
     initialState: {
         products: [] 
 
     },
     reducers: {
         addToCart: (state , action) => {
-            console.log(action.payload);
-            
             const item = state.products.find((product)  => product.id === action.payload.id)
             if (item) { item.quantity ++} 
             else {state.products.push(action.payload)}
