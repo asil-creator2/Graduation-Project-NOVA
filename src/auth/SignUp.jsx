@@ -5,10 +5,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash, FaMoon, FaStar, FaSun } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../Redux/authSlice";
+import { toggleTheme } from "../Redux/ThemeSlice";
 
 import app from "../firebase/firebase";
-import { useDispatch } from "react-redux";
-import { loginSuccess } from "../Redux/authSlice";
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -18,22 +19,20 @@ const SignUp = () => {
   const [showRePassword, setShowRePassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  });
+  
   const dispatch = useDispatch();
+  const theme = useSelector((state) => state.theme);
+  const themeState = theme.state;
+  const isDarkMode = themeState === 'dark';
 
   // Apply dark mode class to html element
   useEffect(() => {
-    if (darkMode) {
+    if (isDarkMode) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
     }
-  }, [darkMode]);
+  }, [isDarkMode]);
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -172,11 +171,11 @@ const SignUp = () => {
       
       {/* Dark Mode Toggle Button */}
       <button
-        onClick={() => setDarkMode(!darkMode)}
+        onClick={() => dispatch(toggleTheme())}
         className="fixed top-5 right-5 z-50 p-2 rounded-full bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-slate-700"
         aria-label="Toggle dark mode"
       >
-        {darkMode ? (
+        {isDarkMode ? (
           <FaSun className="w-5 h-5 text-yellow-500" />
         ) : (
           <FaMoon className="w-5 h-5 text-slate-700" />

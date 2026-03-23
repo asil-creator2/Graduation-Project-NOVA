@@ -5,8 +5,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash, FaMoon, FaSun } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../Redux/authSlice";
+import { toggleTheme } from "../Redux/ThemeSlice";
 
 import app from "../firebase/firebase";
 
@@ -18,20 +19,19 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  });
+  
+  const theme = useSelector((state) => state.theme);
+  const themeState = theme.state;
+  const isDarkMode = themeState === 'dark';
 
+  // Apply theme class to html element
   useEffect(() => {
-    if (darkMode) {
+    if (isDarkMode) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
     }
-  }, [darkMode]);
+  }, [isDarkMode]);
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -138,10 +138,10 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 dark:from-slate-950 dark:to-slate-900 px-4 py-8 transition-colors duration-300">
       
       <button
-        onClick={() => setDarkMode(!darkMode)}
+        onClick={() => dispatch(toggleTheme())}
         className="fixed top-5 right-5 z-50 p-2 rounded-full bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-slate-700"
       >
-        {darkMode ? <FaSun className="w-5 h-5 text-yellow-500" /> : <FaMoon className="w-5 h-5 text-slate-700" />}
+        {isDarkMode ? <FaSun className="w-5 h-5 text-yellow-500" /> : <FaMoon className="w-5 h-5 text-slate-700" />}
       </button>
 
       <div className="w-full max-w-md">
@@ -183,7 +183,7 @@ const Login = () => {
                     ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                 />
                 {formik.touched.email && formik.errors.email && (
-                  <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
+                  <p className="text-red-500 dark:text-red-400 text-sm mt-1">{formik.errors.email}</p>
                 )}
               </div>
 
@@ -207,13 +207,13 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   >
                     {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                   </button>
                 </div>
                 {formik.touched.password && formik.errors.password && (
-                  <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
+                  <p className="text-red-500 dark:text-red-400 text-sm mt-1">{formik.errors.password}</p>
                 )}
               </div>
 
@@ -235,14 +235,14 @@ const Login = () => {
                 <div className="w-full border-t border-gray-200 dark:border-slate-700"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-3 bg-white dark:bg-slate-900 text-gray-500">Or continue with</span>
+                <span className="px-3 bg-white dark:bg-slate-900 text-gray-500 dark:text-gray-400">Or continue with</span>
               </div>
             </div>
 
             <button
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="flex items-center justify-center gap-3 w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition"
+              className="flex items-center justify-center gap-3 w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition"
             >
               <FcGoogle size={22} />
               <span>Continue with Google</span>
@@ -251,7 +251,7 @@ const Login = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Don't have an account?{" "}
-                <Link to="/signup" className="text-indigo-600 font-semibold hover:underline">Sign Up</Link>
+                <Link to="/signup" className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">Sign Up</Link>
               </p>
             </div>
           </div>

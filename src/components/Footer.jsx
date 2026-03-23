@@ -1,6 +1,5 @@
 import { FaStar } from "react-icons/fa";
 
-// ========== FOOTER COMPONENT ==========
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   

@@ -3,6 +3,7 @@ import authReducer from "./authSlice"
 import SearchReducer from "./searchSlice"
 import { persistStore, persistReducer } from "redux-persist"
 import CartReducer from "./cartSlice"
+import ThemeReducer from './ThemeSlice'
 const storage = {
   getItem: (key) => {
     return Promise.resolve(localStorage.getItem(key))
@@ -26,15 +27,20 @@ const persistCartConfig = {
   key: "cart",
   storage,
 }
+const persistThemeConfig = {
+  key: "theme",
+  storage,
+}
 
 const persistedAuth = persistReducer(persistAuthConfig, authReducer)
 const persistedCart = persistReducer(persistCartConfig, CartReducer)
-
+const persistedTheme = persistReducer(persistThemeConfig,ThemeReducer)
 export const store = configureStore({
   reducer: {
     auth: persistedAuth,
     search : SearchReducer,
     cart : persistedCart,
+    theme : persistedTheme,
   },
   middleware: (getDefaultMiddleware) =>
   getDefaultMiddleware({
