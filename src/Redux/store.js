@@ -1,51 +1,55 @@
-import { configureStore } from "@reduxjs/toolkit"
-import authReducer from "./authSlice"
-import SearchReducer from "./searchSlice"
-import { persistStore, persistReducer } from "redux-persist"
-import CartReducer from "./cartSlice"
-import ThemeReducer from './ThemeSlice'
+// Redux/store.js
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./authSlice";
+import searchReducer from "./searchSlice";
+import cartReducer from "./cartSlice";
+import themeReducer from "./ThemeSlice"; // Make sure this is imported correctly
+import { persistStore, persistReducer } from "redux-persist";
+
 const storage = {
   getItem: (key) => {
-    return Promise.resolve(localStorage.getItem(key))
+    return Promise.resolve(localStorage.getItem(key));
   },
   setItem: (key, value) => {
-    localStorage.setItem(key, value)
-    return Promise.resolve()
+    localStorage.setItem(key, value);
+    return Promise.resolve();
   },
   removeItem: (key) => {
-    localStorage.removeItem(key)
-    return Promise.resolve()
+    localStorage.removeItem(key);
+    return Promise.resolve();
   }
-}
+};
 
 const persistAuthConfig = {
   key: "auth",
   storage,
-}
+};
 
 const persistCartConfig = {
   key: "cart",
   storage,
-}
+};
+
 const persistThemeConfig = {
   key: "theme",
   storage,
-}
+};
 
-const persistedAuth = persistReducer(persistAuthConfig, authReducer)
-const persistedCart = persistReducer(persistCartConfig, CartReducer)
-const persistedTheme = persistReducer(persistThemeConfig,ThemeReducer)
+const persistedAuth = persistReducer(persistAuthConfig, authReducer);
+const persistedCart = persistReducer(persistCartConfig, cartReducer);
+const persistedTheme = persistReducer(persistThemeConfig, themeReducer);
+
 export const store = configureStore({
   reducer: {
     auth: persistedAuth,
-    search : SearchReducer,
-    cart : persistedCart,
-    theme : persistedTheme,
+    search: searchReducer,
+    cart: persistedCart,
+    theme: persistedTheme, // Make sure this key matches what you use in useSelector
   },
   middleware: (getDefaultMiddleware) =>
-  getDefaultMiddleware({
-    serializableCheck: false,
-  }),
-})
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
 
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);
