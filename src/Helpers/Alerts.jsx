@@ -2,10 +2,10 @@
 import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 
-export const useAlert = () => {
-  const theme = useSelector((state) => state.theme);
-  const themeState = theme?.state || 'light'; // Add fallback
-  const isDark = themeState === 'dark';
+
+export const useAlerts = () => {
+  const theme = useSelector((state) => state.theme.state);
+  const isDark = theme === 'dark';
 
   // Base alert configuration
   const getBaseConfig = () => ({
