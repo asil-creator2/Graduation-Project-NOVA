@@ -1,10 +1,28 @@
 import { useDispatch } from "react-redux";
 import { addToCart } from '../../Redux/cartSlice';
 import { Link } from 'react-router';
-import {useAlerts} from '../../Helpers/Alerts'
+import Swal from "sweetalert2";
+
+// add to cart alert
+  const showAddedToCart = (productName) => {
+    Swal.fire({
+      title: 'Added to Cart!',
+      text : `${productName}\n has been Added to Cart`,
+      icon: 'success',
+      iconColor: '#3b82f6',
+      confirmButtonText: 'Continue Shopping',
+      timer: 2000,
+      timerProgressBar: true,
+      showConfirmButton: true,
+      customClass: {
+        popup: 'rounded-xl popup',
+        confirmButton: 'confirmButton px-5 py-2 rounded-lg font-medium',
+      }
+    });
+  };
+
 const ProductCard = ({item}) => {
     const dispatch = useDispatch()
-    const { showAddedToCart } = useAlerts();
 
     const handleAddToCart = () => {
         dispatch(addToCart({ ...item, quantity: 1 }));

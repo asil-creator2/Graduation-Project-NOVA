@@ -10,7 +10,24 @@ import { loginSuccess } from "../Redux/authSlice";
 import { toggleTheme } from "../Redux/ThemeSlice";
 
 import app from "../firebase/firebase";
-
+import Swal from "sweetalert2";
+const showWelcome = (userName) => {
+  Swal.fire({
+    title: `Welcome Back${userName}`,
+    showConfirmButton: true,
+    confirmButtonText: 'Start Shopping',
+    confirmButtonColor: '#3b82f6',
+    showCancelButton: false,
+    allowOutsideClick: false,
+    allowEscapeKey: true,
+    timer: 4000,
+    timerProgressBar: true,
+    customClass: {
+        popup: 'rounded-xl popup',
+        confirmButton: 'confirmButton px-5 py-2 rounded-lg font-medium',
+      }
+  })
+};
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
@@ -24,16 +41,14 @@ const SignUp = () => {
   const theme = useSelector((state) => state.theme);
   const themeState = theme.state;
   const isDarkMode = themeState === 'dark';
-
-  // Apply dark mode class to html element
+  // Apply theme class to html element
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+    if (themeState === 'dark') {
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.remove('dark');
     }
-  }, [isDarkMode]);
-
+  }, [themeState]);
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")
@@ -85,7 +100,7 @@ const SignUp = () => {
         await updateProfile(user, {
           displayName: values.name,
         });
-
+        showWelcome(user.displayName || user.email.split('@')[0]);
         // Save user data to Redux
         dispatch(loginSuccess({
           user: {
@@ -95,6 +110,7 @@ const SignUp = () => {
           },
           token: await user.getIdToken()
         }));
+
 
         window.location.href = "/";
       } catch (error) {

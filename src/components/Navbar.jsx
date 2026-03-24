@@ -7,7 +7,25 @@ import { logout } from '../Redux/authSlice';
 import { useEffect, useState } from 'react';
 import { setSearchQuery } from '../Redux/searchSlice';
 import { toggleTheme } from '../Redux/ThemeSlice';
+import Swal from 'sweetalert2';
 
+const showConfirm = async () => {
+  const result = await Swal.fire({
+    title : 'Are you sure You want to Logout ?',
+    text: 'Note : This Action Cannot be undone',
+    icon: 'question',
+    iconColor: '#f59e0b',
+    showCancelButton: true,
+    confirmButtonText: options.confirmText || 'Yes, proceed',
+    cancelButtonText: options.cancelText || 'Cancel',
+    confirmButtonColor: '#3b82f6',
+    customClass: {
+        popup: 'rounded-xl popup',
+        confirmButton: 'confirmButton px-5 py-2 rounded-lg font-medium',
+    }
+  });
+  return result.isConfirmed;
+};
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -4,14 +4,30 @@ import { FcGoogle } from "react-icons/fc";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash, FaMoon, FaSun } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../Redux/authSlice";
 import { toggleTheme } from "../Redux/ThemeSlice";
 
 import app from "../firebase/firebase";
-import { useAlerts } from "../Helpers/Alerts";
-
+import Swal from "sweetalert2";
+const showWelcome = (userName) => {
+  Swal.fire({
+    title: `Welcome Back${userName}`,
+    showConfirmButton: true,
+    confirmButtonText: 'Start Shopping',
+    confirmButtonColor: '#3b82f6',
+    showCancelButton: false,
+    allowOutsideClick: false,
+    allowEscapeKey: true,
+    timer: 4000,
+    timerProgressBar: true,
+    customClass: {
+        popup: 'rounded-xl popup',
+        confirmButton: 'confirmButton px-5 py-2 rounded-lg font-medium',
+      }
+  })
+};
 
 
 
@@ -27,9 +43,15 @@ const Login = () => {
   const theme = useSelector((state) => state.theme);
   const themeState = theme.state;
   const isDarkMode = themeState === 'dark';
-  const { showWelcome, showError } = useAlerts();
 
-
+  // Apply theme class to html element
+  useEffect(() => {
+    if (themeState === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [themeState]);
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email address")
