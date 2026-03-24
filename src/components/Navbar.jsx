@@ -1,7 +1,6 @@
 import { Link, NavLink, useNavigate } from 'react-router';
-import { FaUser, FaSignOutAlt, FaUserCircle} from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
 import { FiSun, FiMoon } from "react-icons/fi";
-
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../Redux/authSlice';
 import { useEffect, useState } from 'react';
@@ -9,23 +8,6 @@ import { setSearchQuery } from '../Redux/searchSlice';
 import { toggleTheme } from '../Redux/ThemeSlice';
 import Swal from 'sweetalert2';
 
-const showConfirm = async () => {
-  const result = await Swal.fire({
-    title : 'Are you sure You want to Logout ?',
-    text: 'Note : This Action Cannot be undone',
-    icon: 'question',
-    iconColor: '#f59e0b',
-    showCancelButton: true,
-    confirmButtonText: options.confirmText || 'Yes, proceed',
-    cancelButtonText: options.cancelText || 'Cancel',
-    confirmButtonColor: '#3b82f6',
-    customClass: {
-        popup: 'rounded-xl popup',
-        confirmButton: 'confirmButton px-5 py-2 rounded-lg font-medium',
-    }
-  });
-  return result.isConfirmed;
-};
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -35,13 +17,12 @@ const Navbar = () => {
   const searchQuery = useSelector((state) => state.search.query);
   const cartCount = useSelector((state) => state.cart.products).length;
   const user = useSelector((state) => state.auth.user);
-  const theme = useSelector((state) => state.theme); // Get the whole theme object
-  const themeState = theme.state; // Get the theme state ('light' or 'dark')
+  const theme = useSelector((state) => state.theme);
+  const themeState = theme?.state || 'light'; // Safe access with fallback
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Check if user is authenticated by checking if user exists
   const isAuthenticated = user !== null && user !== undefined && user.email;
 
   const getUserDisplayName = () => {
@@ -50,10 +31,44 @@ const Navbar = () => {
     return '';
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/');
-    setUserMenuOpen(false);
+  const handleLogout = async () => {
+    // Show confirmation dialog
+    const result = await Swal.fire({
+      title: 'Are you sure you want to logout?',
+      text: 'You will need to sign in again to access your account.',
+      icon: 'question',
+      iconColor: '#f59e0b',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, logout',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+      background: themeState === 'dark' ? '#1e293b' : '#ffffff',
+      color: themeState === 'dark' ? '#f1f5f9' : '#1e293b',
+      customClass: {
+        popup: 'rounded-xl',
+        confirmButton: 'px-5 py-2 rounded-lg font-medium',
+        cancelButton: 'px-5 py-2 rounded-lg font-medium',
+      }
+    });
+
+    if (result.isConfirmed) {
+      dispatch(logout());
+      navigate('/');
+      setUserMenuOpen(false);
+      
+      // Optional: Show success message
+      Swal.fire({
+        title: 'Logged Out!',
+        text: 'You have been successfully logged out.',
+        icon: 'success',
+        confirmButtonColor: '#3b82f6',
+        timer: 2000,
+        showConfirmButton: false,
+        background: themeState === 'dark' ? '#1e293b' : '#ffffff',
+        color: themeState === 'dark' ? '#f1f5f9' : '#1e293b',
+      });
+    }
   };
 
   // Apply theme class to html element
@@ -297,7 +312,7 @@ const Navbar = () => {
                 <a href="#shop" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition" onClick={() => setMobileMenuOpen(false)}>
                   Shop
                 </a>
-                <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition" onClick={() => setMobileMenuOpen(false)}>
+                <a href="#collection" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition" onClick={() => setMobileMenuOpen(false)}>
                   Collections
                 </a>
                 <Link to="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition" onClick={() => setMobileMenuOpen(false)}>

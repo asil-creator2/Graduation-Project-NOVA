@@ -11,23 +11,7 @@ import { toggleTheme } from "../Redux/ThemeSlice";
 
 import app from "../firebase/firebase";
 import Swal from "sweetalert2";
-const showWelcome = (userName) => {
-  Swal.fire({
-    title: `Welcome Back${userName}`,
-    showConfirmButton: true,
-    confirmButtonText: 'Start Shopping',
-    confirmButtonColor: '#3b82f6',
-    showCancelButton: false,
-    allowOutsideClick: false,
-    allowEscapeKey: true,
-    timer: 4000,
-    timerProgressBar: true,
-    customClass: {
-        popup: 'rounded-xl popup',
-        confirmButton: 'confirmButton px-5 py-2 rounded-lg font-medium',
-      }
-  })
-};
+
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
@@ -39,8 +23,9 @@ const SignUp = () => {
   
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.theme);
-  const themeState = theme.state;
+  const themeState = theme?.state || 'light';
   const isDarkMode = themeState === 'dark';
+
   // Apply theme class to html element
   useEffect(() => {
     if (themeState === 'dark') {
@@ -49,6 +34,29 @@ const SignUp = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [themeState]);
+
+  const showWelcomeAlert = (userName) => {
+    return Swal.fire({
+      title: `Welcome ${userName}!`,
+      text: "Your account has been created successfully.",
+      icon: 'success',
+      showConfirmButton: true,
+      confirmButtonText: 'Start Shopping',
+      confirmButtonColor: '#3b82f6',
+      showCancelButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: true,
+      timer: 3000,
+      timerProgressBar: true,
+      background: isDarkMode ? '#1e293b' : '#ffffff',
+      color: isDarkMode ? '#f1f5f9' : '#1e293b',
+      customClass: {
+        popup: 'rounded-xl',
+        confirmButton: 'px-5 py-2 rounded-lg font-medium',
+      }
+    });
+  };
+
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")
@@ -100,7 +108,7 @@ const SignUp = () => {
         await updateProfile(user, {
           displayName: values.name,
         });
-        showWelcome(user.displayName || user.email.split('@')[0]);
+
         // Save user data to Redux
         dispatch(loginSuccess({
           user: {
@@ -111,7 +119,10 @@ const SignUp = () => {
           token: await user.getIdToken()
         }));
 
-
+        // Show alert and wait for it to complete before redirect
+        await showWelcomeAlert(values.name);
+        
+        // Redirect after alert is dismissed
         window.location.href = "/";
       } catch (error) {
         console.log(error.message);
@@ -145,11 +156,12 @@ const SignUp = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+      const userName = user.displayName || user.email.split('@')[0];
       
       // Save user data to Redux for Google Sign-In
       dispatch(loginSuccess({
         user: {
-          displayName: user.displayName || user.email.split('@')[0],
+          displayName: userName,
           email: user.email,
           uid: user.uid,
           photoURL: user.photoURL || null,
@@ -157,6 +169,8 @@ const SignUp = () => {
         token: await user.getIdToken()
       }));
 
+      // Show alert for Google sign up
+      await showWelcomeAlert(userName);
       window.location.href = "/";
     } catch (error) {
       console.log(error);
