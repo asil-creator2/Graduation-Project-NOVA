@@ -13,7 +13,6 @@ import ProductDetails from "./pages/Product"
 import About from "./pages/About"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
-import { useSelector } from "react-redux"
 
 
 const Layout = () => {
@@ -26,7 +25,6 @@ const Layout = () => {
   )
 }
 const App = () => {
-  const theme = useSelector((state) => state.theme.theme)
   const router = createBrowserRouter(createRoutesFromElements(
     <Route>
       <Route path="/" element={<Layout/>}>
@@ -43,7 +41,7 @@ const App = () => {
   ))
 
   return (
-    <div data-theme = {theme.state} className="dark:bg-gray-900">
+    <div className="dark:bg-gray-900">
           <RouterProvider router={router} />
     </div>
   )
