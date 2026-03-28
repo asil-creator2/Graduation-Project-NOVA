@@ -9,7 +9,6 @@ const Category = () => {
         const getCategory = async () => {
             const response = await fetch('https://sandbox.mockerito.com/ecommerce/api/products/categories')
             const data = await response.json()
-            console.log(data)
             setCategories(data)
         }
         getCategory()

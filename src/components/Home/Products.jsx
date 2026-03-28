@@ -21,8 +21,7 @@ const Products = () => {
                 const response = await fetch(url);
                                 
                 const data = await response.json();
-                console.log(activeCategory)
-                console.log(data)
+
                  if (Array.isArray(data)) {
                     setProducts(data);
                 } else if (data && Array.isArray(data.products)) {
