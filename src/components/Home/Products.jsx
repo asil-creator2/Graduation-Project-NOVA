@@ -1,47 +1,51 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import {  useSelector } from 'react-redux';
 import ProductCard from './ProductCard';
+import Category from './Category';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
-    const [activeCategory, setActiveCategory] = useState('All');
     const [loading, setLoading] = useState(true);
     const [loadMore,setLoadMore] = useState(false)
     const searchQuery = useSelector((state) => state.search.query)
+    const activeCategory = useSelector((state) => state.category.text)
 
     useEffect(() => {
         const getProducts = async () => {
+            const url = `https://sandbox.mockerito.com/ecommerce/api${
+                activeCategory.payload === 'all' ? '/products' : `/products/category/${activeCategory.payload}`
+            }`;
+
             try {
-                const response = await fetch('https://fakestoreapi.com/products');
+                
+                const response = await fetch(url);
+                                
                 const data = await response.json();
-                setProducts(data);
+                console.log(activeCategory)
+                console.log(data)
+                 if (Array.isArray(data)) {
+                    setProducts(data);
+                } else if (data && Array.isArray(data.products)) {
+                    setProducts(data.products);
+                }
                 setLoading(false);
             } catch (error) {
-                console.log("An error occurred\n", error);
+                console.error("An error occurred:", error);
                 setLoading(false);
             }
         };
-        getProducts();
-    }, []);
 
-    const categories = [
-        { name: 'All', icon: '✨' },
-        { name: 'Electronics', icon: '💻' },
-        { name: `Men's clothing`, icon: '👕' },
-        { name: `Women's clothing`, icon: '👚' },
-        { name: 'jewelery', icon: '💍' },
-    ];
+
+        getProducts();
+    }, [activeCategory]);
+
+    
 
     // Filter products based on active category
-    const filteredProducts = products.filter(product => {
-        const matchesSearch = searchQuery === '' || 
+    const filteredProducts = products.filter(product => 
             product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            product.description.toLowerCase().includes(searchQuery.toLowerCase());
-        
-        const matchesCategory = activeCategory === 'All' || product.category === activeCategory.toLowerCase();
-        
-        return matchesSearch && matchesCategory;
-    });
+            product.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
     
     const firstHalf = filteredProducts.slice(0, 8);
     const secondHalf = filteredProducts.slice(8);
@@ -58,21 +62,7 @@ const Products = () => {
         <div className='dark:bg-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800'>
             {/* Category Filters - Responsive */}
             <div className="flex flex-wrap gap-2 sm:gap-3 justify-center mb-8 md:mb-12 px-2 ">
-                {categories.map((cat) => (
-                    <button
-                        key={cat.name}
-                        onClick={() => setActiveCategory(cat.name)}
-                        className={`px-4 sm:px-6 py-2 rounded-full font-medium transition-all duration-300 flex items-center gap-1 sm:gap-2 text-sm sm:text-base ${
-                            activeCategory === cat.name
-                                ? 'bg-linear-to-r from-blue-600 to-blue-500 text-white shadow-lg scale-105'
-                                : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 border border-gray-200 dark:border-slate-700'
-                        }`}
-                    >
-                        <span className="text-base sm:text-lg">{cat.icon}</span>
-                        <span className="hidden xs:inline">{cat.name}</span>
-                        <span className="xs:hidden">{cat.name}</span>
-                    </button>
-                ))}
+                <Category/>
             </div>
 
             {/* Product Grid */}

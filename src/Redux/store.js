@@ -5,7 +5,7 @@ import searchReducer from "./searchSlice";
 import cartReducer from "./cartSlice";
 import themeReducer from "./ThemeSlice"; // Make sure this is imported correctly
 import { persistStore, persistReducer } from "redux-persist";
-
+import categoryReducer from './categorySlice'
 const storage = {
   getItem: (key) => {
     return Promise.resolve(localStorage.getItem(key));
@@ -43,8 +43,9 @@ export const store = configureStore({
   reducer: {
     auth: persistedAuth,
     search: searchReducer,
+    category : categoryReducer ,
     cart: persistedCart,
-    theme: persistedTheme, // Make sure this key matches what you use in useSelector
+    theme: persistedTheme, 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

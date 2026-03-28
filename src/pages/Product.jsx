@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router';
 import { 
-  FaStar, FaStarHalfAlt, FaRegStar, FaHeart, FaRegHeart, 
+  FaStar, FaStarHalfAlt, FaRegStar,
   FaShoppingCart, FaShare, FaTruck, FaUndo, FaShieldAlt, 
   FaMinus, FaPlus, FaArrowLeft, FaCheckCircle 
 } from 'react-icons/fa';
@@ -13,12 +13,10 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(1);
-
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+        const response = await fetch(`https://sandbox.mockerito.com/ecommerce/api/products/${id}`);
         const data = await response.json();
         setProduct(data);
         setLoading(false);
@@ -30,15 +28,6 @@ const ProductDetails = () => {
     getProduct();
   }, [id]);
 
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity(prev => prev - 1);
-    }
-  };
-
-  const handleIncrement = () => {
-    setQuantity(prev => prev + 1);
-  };
 
   const renderStars = (rating) => {
     if (!product) return null;
@@ -155,18 +144,17 @@ const ProductDetails = () => {
                 <div className="flex items-center border border-gray-200 dark:border-slate-700 rounded-lg">
                   <button 
                     className="p-3 hover:bg-gray-50 dark:hover:bg-slate-800 transition"
-                    onClick={handleDecrement}
-                    disabled={quantity <= 1}
+                    onClick={() => {dispatch(decrement(product))}}
                   >
                     <FaMinus className="w-3 h-3 text-gray-500" />
                   </button>
                   <span className="w-12 text-center text-gray-900 dark:text-white font-medium">
-                    {quantity}
+                    {product.quantity}
                   </span>
                   <button 
                     className="p-3 hover:bg-gray-50 dark:hover:bg-slate-800 transition"
-                    onClick={handleIncrement}
-                  >
+                    onClick={() => {dispatch(increment(product))}}
+v                  >
                     <FaPlus className="w-3 h-3 text-gray-500" />
                   </button>
                 </div>
