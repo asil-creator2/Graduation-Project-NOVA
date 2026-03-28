@@ -19,17 +19,7 @@ const Cart = () => {
         cartItemsRef.current = cartItems;
     }, [cartItems]);
     
-    // تحميل السلة من Firestore أول ما الصفحة تفتح
-    useEffect(() => {
-        const loadCart = async () => {
-            if (user?.uid) {
-                const cartProducts = await fetchCart(user.uid);
-                dispatch(setCart(cartProducts));
-            }
-        };
-        
-        loadCart();
-    }, [user?.uid, dispatch]);
+
     
     const saveCartToFirestore = async (products) => {
         if (user?.uid) {

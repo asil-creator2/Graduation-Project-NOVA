@@ -13,6 +13,10 @@ import ProductDetails from "./pages/Product"
 import About from "./pages/About"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
+import { useEffect } from "react"
+import { setCart } from "./Redux/cartSlice"
+import { fetchCart } from "./services/cartService"
+import { useDispatch, useSelector } from "react-redux"
 
 
 const Layout = () => {
@@ -25,7 +29,19 @@ const Layout = () => {
   )
 }
 const App = () => {
-  
+  const dispatch = useDispatch()
+    const user = useSelector((state) => state.auth.user);
+  // تحميل السلة من Firestore أول ما الصفحة تفتح
+  useEffect(() => {
+      const loadCart = async () => {
+          if (user?.uid) {
+              const cartProducts = await fetchCart(user.uid);
+              dispatch(setCart(cartProducts));
+          }
+      };
+      
+      loadCart();
+  }, [user?.uid, dispatch]);
   const router = createBrowserRouter(createRoutesFromElements(
     <Route>
       <Route path="/" element={<Layout/>}>
