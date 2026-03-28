@@ -2,7 +2,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import searchReducer from "./searchSlice";
-import cartReducer from "./cartSlice";
+import cartReducer, { syncCartWithFirestore } from "./cartSlice";
 import themeReducer from "./ThemeSlice"; // Make sure this is imported correctly
 import { persistStore, persistReducer } from "redux-persist";
 import categoryReducer from './categorySlice'
@@ -47,10 +47,10 @@ export const store = configureStore({
     cart: persistedCart,
     theme: persistedTheme, 
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+            serializableCheck: false,
+    }).concat(syncCartWithFirestore)
 });
 
 export const persistor = persistStore(store);

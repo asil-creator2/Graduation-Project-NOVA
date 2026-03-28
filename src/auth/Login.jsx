@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../Redux/authSlice";
 import { toggleTheme } from "../Redux/ThemeSlice";
-
 import app from "../firebase/firebase";
 import Swal from "sweetalert2";
 
@@ -20,7 +19,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
-  
+
   const theme = useSelector((state) => state.theme);
   const themeState = theme?.state || 'light';
   const isDarkMode = themeState === 'dark';
@@ -92,7 +91,8 @@ const Login = () => {
         
         // Show alert and wait for it to complete before redirect
         await showWelcomeAlert(user.displayName || user.email.split('@')[0]);
-        
+
+
         // Redirect after alert is dismissed
         window.location.href = "/";
       } catch (error) {

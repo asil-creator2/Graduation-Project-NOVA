@@ -5,7 +5,7 @@ import {
   FaMinus, FaPlus, FaArrowLeft, FaCheckCircle 
 } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { addToCart, decrement, increment } from '../Redux/cartSlice';
+import { addToCart } from '../Redux/cartSlice';
 import { useEffect, useState } from 'react';
 
 const ProductDetails = () => {
@@ -135,31 +135,6 @@ const ProductDetails = () => {
               <span className="text-xs text-gray-500 dark:text-gray-400">• Ready to ship</span>
             </div>
 
-            {/* Quantity Selector */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                Quantity
-              </label>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center border border-gray-200 dark:border-slate-700 rounded-lg">
-                  <button 
-                    className="p-3 hover:bg-gray-50 dark:hover:bg-slate-800 transition"
-                    onClick={() => {dispatch(decrement(product))}}
-                  >
-                    <FaMinus className="w-3 h-3 text-gray-500" />
-                  </button>
-                  <span className="w-12 text-center text-gray-900 dark:text-white font-medium">
-                    {product.quantity}
-                  </span>
-                  <button 
-                    className="p-3 hover:bg-gray-50 dark:hover:bg-slate-800 transition"
-                    onClick={() => {dispatch(increment(product))}}
-v                  >
-                    <FaPlus className="w-3 h-3 text-gray-500" />
-                  </button>
-                </div>
-              </div>
-            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { setSearchQuery } from '../Redux/searchSlice';
 import { toggleTheme } from '../Redux/ThemeSlice';
 import Swal from 'sweetalert2';
-
+import { clearCart } from '../Redux/cartSlice';
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -53,9 +53,14 @@ const Navbar = () => {
     });
 
     if (result.isConfirmed) {
+      // 2. نمسح السلة من Redux
+      dispatch(clearCart());  // ← دي الجديدة
+      
+      // 3. نعمل logout
       dispatch(logout());
-      navigate('/');
-      setUserMenuOpen(false);
+      
+
+        
       
       // Optional: Show success message
       Swal.fire({

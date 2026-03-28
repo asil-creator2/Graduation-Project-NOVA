@@ -13,7 +13,7 @@ const Products = () => {
     useEffect(() => {
         const getProducts = async () => {
             const url = `https://sandbox.mockerito.com/ecommerce/api${
-                activeCategory.payload === 'all' ? '/products' : `/products/category/${activeCategory.payload}`
+                (activeCategory === 'all' ? activeCategory : activeCategory.payload) === 'all' ? '/products' : `/products/category/${activeCategory.payload}`
             }`;
 
             try {

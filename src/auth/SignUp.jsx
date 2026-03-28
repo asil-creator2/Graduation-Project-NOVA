@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../Redux/authSlice";
 import { toggleTheme } from "../Redux/ThemeSlice";
-
 import app from "../firebase/firebase";
 import Swal from "sweetalert2";
 
@@ -16,6 +15,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 const SignUp = () => {
+
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -121,7 +121,7 @@ const SignUp = () => {
 
         // Show alert and wait for it to complete before redirect
         await showWelcomeAlert(values.name);
-        
+
         // Redirect after alert is dismissed
         window.location.href = "/";
       } catch (error) {
@@ -171,6 +171,8 @@ const SignUp = () => {
 
       // Show alert for Google sign up
       await showWelcomeAlert(userName);
+
+      
       window.location.href = "/";
     } catch (error) {
       console.log(error);

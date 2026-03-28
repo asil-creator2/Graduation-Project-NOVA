@@ -25,6 +25,7 @@ const Layout = () => {
   )
 }
 const App = () => {
+  
   const router = createBrowserRouter(createRoutesFromElements(
     <Route>
       <Route path="/" element={<Layout/>}>

@@ -1,7 +1,8 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from '../../Redux/cartSlice';
 import { Link } from 'react-router';
 import Swal from "sweetalert2";
+import { saveCart } from '../../services/cartService';
 
 // add to cart alert
   const showAddedToCart = (productName) => {
@@ -21,15 +22,26 @@ import Swal from "sweetalert2";
     });
   };
 
-const ProductCard = ({item}) => {
-    const dispatch = useDispatch()
 
-    const handleAddToCart = () => {
-        dispatch(addToCart({ ...item, quantity: 1 }));
-        showAddedToCart(item.title);
+const ProductCard = ({ item }) => {
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth.user);
+    const cartItems = useSelector((state) => state.cart.products);
+
+    const handleAddToCart = async () => {
+        // نضيف في Redux
+        dispatch(addToCart(item));
+        
+        // نحفظ في Firestore
+        if (user?.uid) {
+            const updatedCart = [...cartItems, { ...item, quantity: item.quantity ? item.quantity : 1 , }];
+            await saveCart(user.uid, updatedCart);
+        }
+        
+        // Alert
+        showAddedToCart(item.title)
     };
-  
-
+    
     const getRatingDisplay = (rating) => {
         if (!rating || rating.rate === undefined) {
             return { stars: 0, count: 0 };
