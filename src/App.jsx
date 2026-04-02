@@ -17,11 +17,13 @@ import { useEffect } from "react"
 import { setCart } from "./Redux/cartSlice"
 import { fetchCart } from "./services/cartService"
 import { useDispatch, useSelector } from "react-redux"
+import ScrollToTop from "./utils/scrollToTop"
 
 
 const Layout = () => {
   return (
     <>
+    <ScrollToTop/>
     <Navbar/>
     <Outlet/>
     <Footer/>
