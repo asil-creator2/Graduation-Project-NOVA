@@ -107,12 +107,12 @@ const Navbar = () => {
           <div className="flex justify-between items-center h-16 md:h-20">
             {/* Logo */}
             <NavLink to="/" className="flex items-center space-x-3 cursor-pointer group shrink-0">
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-linear-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform">
                 <span className="text-white font-black text-lg md:text-xl">★</span>
               </div>
               <span className="text-xl md:text-2xl font-black tracking-tight">
                 <span className="text-gray-900 dark:text-white">NOVA</span>
-                <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">.</span>
+                <span className="bg-linear-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">.</span>
               </span>
             </NavLink>
             
@@ -120,19 +120,19 @@ const Navbar = () => {
             <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
               <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-200 relative group">
                 Home
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <Link to="/shop" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-200 relative group">
                 Shop
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <Link to="/collections" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-200 relative group">
                 Collections
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-200 relative group">
                 About
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
             </div>
   
@@ -144,7 +144,7 @@ const Navbar = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 {cartCount > 0 && (
-                  <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                  <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-linear-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
                     {cartCount}
                   </div>
                 )}
@@ -245,7 +245,7 @@ const Navbar = () => {
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-all duration-200"
                   >
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white">
+                    <div className="w-8 h-8 bg-linear-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white">
                       <FaUser className="w-4 h-4" />
                     </div>
                     <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -292,7 +292,7 @@ const Navbar = () => {
               ) : (
                 <NavLink 
                   to="/signup" 
-                  className="hidden sm:block px-4 md:px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full font-semibold text-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                  className="hidden sm:block px-4 md:px-6 py-2 bg-linear-to-r from-blue-600 to-blue-500 text-white rounded-full font-semibold text-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                 >
                   Sign Up
                 </NavLink>
@@ -331,7 +331,7 @@ const Navbar = () => {
           {/* Header - Smaller padding */}
           <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-slate-700">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-7 h-7 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">★</span>
               </div>
               <span className="font-bold text-gray-900 dark:text-white text-sm">NOVA</span>
@@ -350,11 +350,11 @@ const Navbar = () => {
           <div className="p-3 border-b border-gray-200 dark:border-slate-700">
             <NavLink 
               to="/cart" 
-              className="flex items-center justify-between px-2 py-2 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg transition"
+              className="flex items-center justify-between px-2 py-2 bg-linear-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg transition"
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-linear-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                   <FaShoppingCart className="w-4 h-4 text-white" />
                 </div>
                 <div>
@@ -375,7 +375,7 @@ const Navbar = () => {
           {isAuthenticated && (
             <div className="p-3 border-b border-gray-200 dark:border-slate-700">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white">
+                <div className="w-8 h-8 bg-linear-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white">
                   <FaUser className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -399,8 +399,8 @@ const Navbar = () => {
                 </svg>
                 Home
               </Link>
-              <Link 
-                to="/shop" 
+              <a 
+                hef="#shop" 
                 className="flex items-center gap-3 px-2 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-slate-800 rounded-lg transition"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -408,7 +408,7 @@ const Navbar = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 Shop
-              </Link>
+              </a>
               <Link 
                 to="/collections" 
                 className="flex items-center gap-3 px-2 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-slate-800 rounded-lg transition"
@@ -438,7 +438,7 @@ const Navbar = () => {
               <div className="space-y-2">
                 <NavLink 
                   to="/signup" 
-                  className="block w-full px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg font-semibold text-sm text-center"
+                  className="block w-full px-3 py-2 bg-linear-to-r from-blue-600 to-blue-500 text-white rounded-lg font-semibold text-sm text-center"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Sign Up
