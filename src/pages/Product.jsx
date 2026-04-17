@@ -7,6 +7,26 @@ import {
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../Redux/cartSlice';
 import { useEffect, useState } from 'react';
+import { saveCart } from '../services/cartService';
+
+
+// add to cart alert
+  const showAddedToCart = (productName) => {
+    Swal.fire({
+      title: 'Added to Cart!',
+      text : `${productName}\n has been Added to Cart`,
+      icon: 'success',
+      iconColor: '#3b82f6',
+      confirmButtonText: 'Continue Shopping',
+      timer: 2000,
+      timerProgressBar: true,
+      showConfirmButton: true,
+      customClass: {
+        popup: 'rounded-xl popup',
+        confirmButton: 'confirmButton px-5 py-2 rounded-lg font-medium',
+      }
+    });
+  };
 
 const ProductDetails = () => {
   const { id } = useParams(); // Get ID from URL
@@ -27,7 +47,19 @@ const ProductDetails = () => {
     };
     getProduct();
   }, [id]);
-
+      const handleAddToCart = async () => {
+          // نضيف في Redux
+          dispatch(addToCart(product));
+          
+          // نحفظ في Firestore
+          if (user?.uid) {
+              const updatedCart = [...cartItems, { ...product, quantity: product.quantity ? product.quantity : 1 , }];
+              await saveCart(user.uid, updatedCart);
+          }
+          
+          // Alert
+          showAddedToCart(product.title)
+      };
 
   const renderStars = (rating) => {
     if (!product) return null;
@@ -140,7 +172,7 @@ const ProductDetails = () => {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button 
                 className="cursor-pointer flex-1 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2 bg-linear-to-r from-blue-600 to-blue-500 text-white shadow-lg"
-                onClick={() => dispatch(addToCart({...product, quantity: quantity}))}
+                onClick={handleAddToCart}
               >
                 <FaShoppingCart className="w-4 h-4" />
                 Add to Cart
